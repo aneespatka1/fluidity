@@ -1,0 +1,4 @@
+Link: https://logoipsum.com/artwork/256
+Description: A fluid metaball-like logogram with gradient color
+Font: https://fonts.google.com/specimen/Manrope
+Colors: #333268, #F2F5FA, #FF557E, #FF5555, #58CCDC, #8263DB, #8172DA, #41D1B7, #FFEC45
