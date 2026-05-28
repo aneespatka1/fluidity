@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 
+import { verifyAuth } from "./auth";
 import { mutation, query } from "./_generated/server";
 
 export const create = mutation({
@@ -7,27 +8,38 @@ export const create = mutation({
         name: v.string()
     },
     handler: async (ctx, args) => {
-        const identity = await ctx.auth.getUserIdentity();
-        if (!identity) {
-            throw new Error("Unauthorized");
-        }
+        const identity = await verifyAuth(ctx);
 
         await ctx.db.insert("projects", {
             name: args.name,
             ownerId: identity?.subject,
+            updatedAt: Date.now(),
         })
+    },
+});
+
+export const getPartial = query({
+    args: {
+        limit: v.number(),
+    },
+    handler: async (ctx, args) => {
+        const identity = await verifyAuth(ctx);
+
+        return await ctx.db.query("projects")
+        .withIndex("by_owner", (q) => q.eq("ownerId", identity.subject))
+        .order("desc")
+        .take(args.limit);
     },
 });
 
 export const get = query({
     args: {},
     handler: async (ctx) => {
-        const identity = await ctx.auth.getUserIdentity();
-        if (!identity) {
-            throw [];
-        }
+        const identity = await verifyAuth(ctx);
+
         return await ctx.db.query("projects")
         .withIndex("by_owner", (q) => q.eq("ownerId", identity.subject))
+        .order("desc")
         .collect();
     },
 });
