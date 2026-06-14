@@ -5,6 +5,7 @@ import { Allotment } from "allotment";
 import { Navbar } from "./navbar";
 import { Id } from "../../../../convex/_generated/dataModel";
 
+// @ts-ignore: side-effect import of CSS without type declarations
 import "allotment/dist/style.css";
 
 const MIN_SIDEBAR_WIDTH = 200;
